@@ -11,8 +11,8 @@ import (
 	"net/http"
 )
 
-func GetFolders(c *gin.Context) {
-	var folders []models.Folder
+func GetFiles(c *gin.Context) {
+	var files []models.File
 
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
@@ -20,23 +20,23 @@ func GetFolders(c *gin.Context) {
 		return
 	}
 
-	err = db.Find(&folders).Error
+	err = db.Find(&files).Error
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to get folder list due to [Error]: %v", err)
+		log.Printf("Failed to get file list due to [Error]: %v", err)
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Success",
-		"data":    folders,
+		"data":    files,
 	})
 }
 
-func GetFolder(c *gin.Context) {
-	folderId := c.Param("id")
+func GetFile(c *gin.Context) {
+	fileId := c.Param("id")
 
-	var folder models.Folder
+	var file models.File
 
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
@@ -44,7 +44,7 @@ func GetFolder(c *gin.Context) {
 		return
 	}
 
-	err = db.Where("id = ?", folderId).First(&folder).Error
+	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("No Record found due to [Error]: %v", err)
 		return
@@ -53,21 +53,21 @@ func GetFolder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Success",
-		"data":    folder,
+		"data":    file,
 	})
 }
 
-func CreateFolder(c *gin.Context) {
+func CreateFile(c *gin.Context) {
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to get Request Body due to [Error]: %v", err)
 		return
 	}
 
-	var folder models.Folder
-	err = json.Unmarshal(jsonData, &folder)
+	var file models.File
+	err = json.Unmarshal(jsonData, &file)
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to parse Json to folder due to [Error]: %v", err)
+		log.Printf("Failed to parse Json to file due to [Error]: %v", err)
 		return
 	}
 
@@ -77,38 +77,38 @@ func CreateFolder(c *gin.Context) {
 		return
 	}
 
-	var folders []models.Folder
-	folderName := folder.Name
-	folderParentId := folder.ParentId
-	db.Where("parent_id = ?", folderParentId).Find(&folders)
-	if len(folders) > 0 {
-		for _, e := range folders {
-			if folderName == e.Name {
-				err = errors.New("the folder name already exists")
-			}
-			if util.HandleErrorBadRequest(c, err) {
-				log.Printf("Failed to create new folder due to [Error]: %v", err)
-				return
-			}
-		}
-	}
 	var files []models.File
-	db.Where("folder_id = ?", folderParentId).Find(&files)
+	fileName := file.Name
+	fileFolderId := file.FolderId
+	db.Where("folder_id = ?", fileFolderId).Find(&files)
 	if len(files) > 0 {
 		for _, e := range files {
-			if folderName == e.Name {
-				err = errors.New("the folder name already exists")
+			if fileName == e.Name {
+				err = errors.New("the file name already exists")
 			}
 			if util.HandleErrorBadRequest(c, err) {
-				log.Printf("Failed to create new folder due to [Error]: %v", err)
+				log.Printf("Failed to create new file due to [Error]: %v", err)
+				return
+			}
+		}
+	}
+	var folders []models.Folder
+	db.Where("parent_id = ?", fileFolderId).Find(&folders)
+	if len(folders) > 0 {
+		for _, e := range folders {
+			if fileName == e.Name {
+				err = errors.New("the file name already exists")
+			}
+			if util.HandleErrorBadRequest(c, err) {
+				log.Printf("Failed to create new file due to [Error]: %v", err)
 				return
 			}
 		}
 	}
 
-	err = db.Create(&folder).Error
+	err = db.Create(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to create new folder due to [Error]: %v", err)
+		log.Printf("Failed to create new file due to [Error]: %v", err)
 		return
 	}
 
@@ -118,8 +118,8 @@ func CreateFolder(c *gin.Context) {
 	})
 }
 
-func UpdateFolder(c *gin.Context) {
-	folderId := c.Param("id")
+func UpdateFile(c *gin.Context) {
+	fileId := c.Param("id")
 
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if util.HandleErrorBadRequest(c, err) {
@@ -127,10 +127,10 @@ func UpdateFolder(c *gin.Context) {
 		return
 	}
 
-	var updateFolder models.Folder
-	err = json.Unmarshal(jsonData, &updateFolder)
+	var updateFile models.File
+	err = json.Unmarshal(jsonData, &updateFile)
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to parse Json to updateFolder due to [Error]: %v", err)
+		log.Printf("Failed to parse Json to updateFile due to [Error]: %v", err)
 		return
 	}
 
@@ -140,16 +140,16 @@ func UpdateFolder(c *gin.Context) {
 		return
 	}
 
-	var folder models.Folder
-	err = db.Where("id = ?", folderId).First(&folder).Error
+	var file models.File
+	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("No Record found due to [Error]: %v", err)
 		return
 	}
 
-	err = db.Model(&folder).Updates(&updateFolder).Error
+	err = db.Model(&file).Updates(&updateFile).Error
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to update folder due to [Error]: %v", err)
+		log.Printf("Failed to update file due to [Error]: %v", err)
 		return
 	}
 
@@ -159,8 +159,8 @@ func UpdateFolder(c *gin.Context) {
 	})
 }
 
-func DeleteFolder(c *gin.Context) {
-	folderId := c.Param("id")
+func DeleteFile(c *gin.Context) {
+	fileId := c.Param("id")
 
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
@@ -168,16 +168,16 @@ func DeleteFolder(c *gin.Context) {
 		return
 	}
 
-	var folder models.Folder
-	err = db.Where("id = ?", folderId).First(&folder).Error
+	var file models.File
+	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("No Record found due to [Error]: %v", err)
 		return
 	}
 
-	err = db.Delete(&folder).Error
+	err = db.Delete(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
-		log.Printf("Failed to delete folder due to [Error]: %v", err)
+		log.Printf("Failed to delete file due to [Error]: %v", err)
 		return
 	}
 

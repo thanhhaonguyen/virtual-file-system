@@ -46,5 +46,12 @@ func main() {
 	r.PUT("/folder/:id", controller.UpdateFolder)
 	r.DELETE("/folder/:id", controller.DeleteFolder)
 
+	// file APIs
+	r.GET("/file", controller.GetFiles)
+	r.GET("/file/:id", controller.GetFile)
+	r.POST("/file", controller.CreateFile)
+	r.PUT("/file/:id", controller.UpdateFile)
+	r.DELETE("/file/:id", controller.DeleteFile)
+
 	r.Run(initDomain())
 }
