@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0125b9d4-e5ca-479c-9314-9ce145c78c1b" name="Changes" comment="" />
+    <list default="true" id="0125b9d4-e5ca-479c-9314-9ce145c78c1b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/file-system-api/models/db-connection.go" beforeDir="false" afterPath="$PROJECT_DIR$/file-system-api/models/db-connection.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-system-api/models/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/file-system-api/models/file.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +38,7 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/hao.nt/Gianty/Projects/Gambaru/local/virtual-file-system/file-system-api"
+    "last_opened_file_path": "C:/Users/hao.nt/Gianty/Projects/Gambaru/my-github/virtual-file-system/file-system-api"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

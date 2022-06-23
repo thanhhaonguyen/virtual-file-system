@@ -29,7 +29,7 @@ func CreateDBConnection() {
 	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   os.Getenv("PG_SCHEMA") + ".",
-			SingularTable: false,
+			SingularTable: true,
 		}})
 	if err != nil {
 		panic("Error occurred while connecting with the database")
@@ -37,7 +37,7 @@ func CreateDBConnection() {
 
 	err = db.AutoMigrate(&Folder{}, &File{})
 	if err != nil {
-		panic("Error occurred while migrating from the database")
+		panic("Error occurred while migrating schemas into the database")
 	}
 
 	dbConn = db
@@ -48,7 +48,9 @@ func GetDatabaseConnection() (*gorm.DB, error) {
 	if err != nil {
 		return dbConn, err
 	}
-	if err := sqlDB.Ping(); err != nil {
+
+	err = sqlDB.Ping()
+	if err != nil {
 		return dbConn, err
 	}
 

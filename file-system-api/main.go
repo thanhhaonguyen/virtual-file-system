@@ -35,12 +35,16 @@ func initDomain() string {
 
 func main() {
 	r := gin.Default()
-	r.Use(cors.CorsMiddleware())
+	r.Use(cors.MiddlewareCors())
 
 	models.CreateDBConnection()
 
-	r.GET("/folders", controller.GetFolderList)
+	// folder APIs
+	r.GET("/folder", controller.GetFolders)
+	r.GET("/folder/:id", controller.GetFolder)
 	r.POST("/folder", controller.CreateFolder)
+	r.PUT("/folder/:id", controller.UpdateFolder)
+	r.DELETE("/folder/:id", controller.DeleteFolder)
 
 	r.Run(initDomain())
 }
