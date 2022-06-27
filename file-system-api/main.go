@@ -21,6 +21,7 @@ func initDomain() string {
 	appEnv := os.Getenv("APP_ENV")
 	appPort := os.Getenv("API_PORT")
 
+	// for local
 	domain := "localhost"
 
 	if appEnv == "prod" {
@@ -35,8 +36,11 @@ func initDomain() string {
 
 func main() {
 	r := gin.Default()
+
+	// cors middleware
 	r.Use(cors.MiddlewareCors())
 
+	// connect to Postgres DB
 	models.CreateDBConnection()
 
 	// folder APIs

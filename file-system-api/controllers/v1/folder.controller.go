@@ -14,12 +14,14 @@ import (
 func GetFolders(c *gin.Context) {
 	var folders []models.Folder
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// query to find all folders
 	err = db.Find(&folders).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to get folder list due to [Error]: %v", err)
@@ -37,12 +39,14 @@ func GetFoldersByParentId(c *gin.Context) {
 	parentId := c.Param("id")
 	var folders []models.Folder
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// query to get folder by parentId
 	err = db.Where("parent_id = ?", parentId).Find(&folders).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to get folder list due to [Error]: %v", err)
@@ -61,12 +65,14 @@ func GetFolder(c *gin.Context) {
 
 	var folder models.Folder
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// query to get folder by folderId
 	err = db.Where("id = ?", folderId).First(&folder).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("No Record found due to [Error]: %v", err)
@@ -87,6 +93,7 @@ func CreateFolder(c *gin.Context) {
 		return
 	}
 
+	// parse request body into folder model
 	var folder models.Folder
 	err = json.Unmarshal(jsonData, &folder)
 	if util.HandleErrorBadRequest(c, err) {
@@ -94,12 +101,14 @@ func CreateFolder(c *gin.Context) {
 		return
 	}
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there are any folder name already exists
 	var folders []models.Folder
 	folderName := folder.Name
 	folderParentId := folder.ParentId
@@ -115,6 +124,7 @@ func CreateFolder(c *gin.Context) {
 			}
 		}
 	}
+	// check if there are any file name already exists
 	var files []models.File
 	db.Where("folder_id = ?", folderParentId).Find(&files)
 	if len(files) > 0 {
@@ -129,6 +139,7 @@ func CreateFolder(c *gin.Context) {
 		}
 	}
 
+	// query to create a new folder
 	err = db.Create(&folder).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to create new folder due to [Error]: %v", err)
@@ -150,6 +161,7 @@ func UpdateFolder(c *gin.Context) {
 		return
 	}
 
+	// parse request body into folder model
 	var updateFolder models.Folder
 	err = json.Unmarshal(jsonData, &updateFolder)
 	if util.HandleErrorBadRequest(c, err) {
@@ -157,12 +169,14 @@ func UpdateFolder(c *gin.Context) {
 		return
 	}
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there is any record contain folderId
 	var folder models.Folder
 	err = db.Where("id = ?", folderId).First(&folder).Error
 	if util.HandleErrorBadRequest(c, err) {
@@ -170,6 +184,7 @@ func UpdateFolder(c *gin.Context) {
 		return
 	}
 
+	// query to update folder
 	err = db.Model(&folder).Updates(&updateFolder).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to update folder due to [Error]: %v", err)
@@ -185,12 +200,14 @@ func UpdateFolder(c *gin.Context) {
 func DeleteFolder(c *gin.Context) {
 	folderId := c.Param("id")
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there is any record contain folderId
 	var folder models.Folder
 	err = db.Where("id = ?", folderId).First(&folder).Error
 	if util.HandleErrorBadRequest(c, err) {
@@ -198,6 +215,7 @@ func DeleteFolder(c *gin.Context) {
 		return
 	}
 
+	// query to delete folder
 	err = db.Delete(&folder).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to delete folder due to [Error]: %v", err)

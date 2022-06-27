@@ -103,9 +103,10 @@ const FileSystem = () => {
                         "cr": (args, print) => CreateFile(args, print)
                     }}
                     descriptions={{
-                        "cd": "change current working directory",
+                        // "cd": "change current working directory",
                         "ls": "list out all items directly under a folder",
                         "mkdir": "create a new directory",
+                        "cr": "create a new file"
                     }}
                     msg="Welcome to Virtual-file-system !!!"
                 />

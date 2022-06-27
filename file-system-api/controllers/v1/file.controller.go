@@ -14,12 +14,14 @@ import (
 func GetFiles(c *gin.Context) {
 	var files []models.File
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// query to get all files
 	err = db.Find(&files).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to get file list due to [Error]: %v", err)
@@ -38,12 +40,14 @@ func GetFile(c *gin.Context) {
 
 	var file models.File
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// query to get file with fileId
 	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("No Record found due to [Error]: %v", err)
@@ -64,6 +68,7 @@ func CreateFile(c *gin.Context) {
 		return
 	}
 
+	// parse request body into file model
 	var file models.File
 	err = json.Unmarshal(jsonData, &file)
 	if util.HandleErrorBadRequest(c, err) {
@@ -71,12 +76,14 @@ func CreateFile(c *gin.Context) {
 		return
 	}
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there are any file name already exists
 	var files []models.File
 	fileName := file.Name
 	fileFolderId := file.FolderId
@@ -92,6 +99,7 @@ func CreateFile(c *gin.Context) {
 			}
 		}
 	}
+	// check if there are any folder name already exists
 	var folders []models.Folder
 	db.Where("parent_id = ?", fileFolderId).Find(&folders)
 	if len(folders) > 0 {
@@ -106,6 +114,7 @@ func CreateFile(c *gin.Context) {
 		}
 	}
 
+	// query to create a new file
 	err = db.Create(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to create new file due to [Error]: %v", err)
@@ -127,6 +136,7 @@ func UpdateFile(c *gin.Context) {
 		return
 	}
 
+	// parse request body into file model
 	var updateFile models.File
 	err = json.Unmarshal(jsonData, &updateFile)
 	if util.HandleErrorBadRequest(c, err) {
@@ -134,12 +144,14 @@ func UpdateFile(c *gin.Context) {
 		return
 	}
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there is any record contain fileId
 	var file models.File
 	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
@@ -147,6 +159,7 @@ func UpdateFile(c *gin.Context) {
 		return
 	}
 
+	// query to update file
 	err = db.Model(&file).Updates(&updateFile).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to update file due to [Error]: %v", err)
@@ -162,12 +175,14 @@ func UpdateFile(c *gin.Context) {
 func DeleteFile(c *gin.Context) {
 	fileId := c.Param("id")
 
+	// get Postgres DB connection
 	db, err := models.GetDatabaseConnection()
 	if util.HandleErrorInternalServer(c, err) {
 		log.Printf("Failed to connect to database due to [Error]: %v", err)
 		return
 	}
 
+	// check if there is any record contain fileIds
 	var file models.File
 	err = db.Where("id = ?", fileId).First(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
@@ -175,6 +190,7 @@ func DeleteFile(c *gin.Context) {
 		return
 	}
 
+	// query to delete file
 	err = db.Delete(&file).Error
 	if util.HandleErrorBadRequest(c, err) {
 		log.Printf("Failed to delete file due to [Error]: %v", err)

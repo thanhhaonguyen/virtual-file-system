@@ -43,7 +43,7 @@ func CreateDBConnection() {
 	dbConn = db
 }
 
-func GetDatabaseConnection() (*gorm.DB, error) {
+var GetDatabaseConnection = func() (*gorm.DB, error) {
 	sqlDB, err := dbConn.DB()
 	if err != nil {
 		return dbConn, err
