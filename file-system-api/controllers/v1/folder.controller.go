@@ -33,6 +33,29 @@ func GetFolders(c *gin.Context) {
 	})
 }
 
+func GetFoldersByParentId(c *gin.Context) {
+	parentId := c.Param("id")
+	var folders []models.Folder
+
+	db, err := models.GetDatabaseConnection()
+	if util.HandleErrorInternalServer(c, err) {
+		log.Printf("Failed to connect to database due to [Error]: %v", err)
+		return
+	}
+
+	err = db.Where("parent_id = ?", parentId).Find(&folders).Error
+	if util.HandleErrorBadRequest(c, err) {
+		log.Printf("Failed to get folder list due to [Error]: %v", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Success",
+		"data":    folders,
+	})
+}
+
 func GetFolder(c *gin.Context) {
 	folderId := c.Param("id")
 

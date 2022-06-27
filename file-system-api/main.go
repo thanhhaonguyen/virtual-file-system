@@ -41,6 +41,7 @@ func main() {
 
 	// folder APIs
 	r.GET("/folder", controller.GetFolders)
+	r.GET("/folder-by-parent/:id", controller.GetFoldersByParentId)
 	r.GET("/folder/:id", controller.GetFolder)
 	r.POST("/folder", controller.CreateFolder)
 	r.PUT("/folder/:id", controller.UpdateFolder)
