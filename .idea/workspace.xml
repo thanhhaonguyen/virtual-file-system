@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0125b9d4-e5ca-479c-9314-9ce145c78c1b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/file-system-api/db.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file-system-api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/file-system-api/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="0125b9d4-e5ca-479c-9314-9ce145c78c1b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +35,7 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/hao.nt/Gianty/Projects/Gambaru/my-github/virtual-file-system",
+    "last_opened_file_path": "C:/Users/hao.nt/Gianty/Projects/Gambaru/my-github/virtual-file-system/file-system-ui",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -52,7 +47,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1656397984638</updated>
-      <workItem from="1656397986018" duration="125000" />
+      <workItem from="1656397986018" duration="186000" />
     </task>
     <servers />
   </component>
