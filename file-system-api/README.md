@@ -18,7 +18,7 @@ This project includes:
 
 ## APIs
 ### Folder
-```shell script
+```
 [GET]     "/folder"
 [GET]     "/folder-by-parent/:id"
 [GET]     "/folder/:id"
@@ -27,7 +27,7 @@ This project includes:
 [DELETE]  "/folder/:id"
 ```
 ### File
-```shell script
+```
 [GET]     "/file"
 [GET]     "/file/:id"
 [POST]    "/file"
@@ -36,7 +36,6 @@ This project includes:
 ```
 
 ## Running the application and visit "localhost:8080" on browser
-
 ```shell script
 go run main.go
 ```
