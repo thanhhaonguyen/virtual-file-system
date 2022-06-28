@@ -16,6 +16,12 @@ This project includes:
 - ```utils:``` handle general errors in the app
 - ```tests:``` implement Unit Test
 
+## Using PostgreSQL
+```
+folder(id, name, parent_id, created_at)
+file(id, name, data, folder_id, created_at)
+```
+
 ## APIs
 BaseURL: https://virtual-file-system-v1.herokuapp.com/
 ### Folder
