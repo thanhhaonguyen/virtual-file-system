@@ -2,10 +2,12 @@ package models
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"os"
 )
 
 var dbConn *gorm.DB
@@ -23,6 +25,7 @@ func GetDSN() string {
 }
 
 func CreateDBConnection() {
+	log.Print(GetDSN())
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  GetDSN(),
 		PreferSimpleProtocol: true,
